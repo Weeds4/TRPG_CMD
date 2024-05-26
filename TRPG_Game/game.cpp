@@ -15,9 +15,9 @@ void Player::displayStatus() const {
         setColor(white, white);
         for (int i = x - 9; i <= x + 47; ++i) {
             gotoxy(i, y + 1);
-            std::cout << "1";
+            std::cout << " ";
             gotoxy(i, y + 1);
-            std::cout << "1";
+            std::cout << " ";
         }
     }
 
@@ -39,15 +39,15 @@ int Scene::display() const {
         setColor(white, white);
         for (int i = x - 12; i <= x + 45; ++i) {
             gotoxy(i, y - 13);
-            std::cout << "1";
+            std::cout << " ";
             gotoxy(i, y + 6);
-            std::cout << "1";
+            std::cout << " ";
         }
         for (int j = y - 13; j <= y + 6; ++j) {
             gotoxy(x - 12, j);
-            std::cout << "1";
+            std::cout << " ";
             gotoxy(x + 45, j);
-            std::cout << "1";
+            std::cout << " ";
         }
     }
 
@@ -62,10 +62,10 @@ int Scene::display() const {
     for (const auto& choice : choices) {
         gotoxy(x - 2, y + index);
         if (index == 0) {
-            std::cout << "> " << choice.second.first;
+            std::cout << "> " << std::get<0>(choice.second);
         }
         else {
-            std::cout << "  " << choice.second.first;
+            std::cout << "  " << std::get<0>(choice.second);
         }
         keys.push_back(choice.first);
         ++index;
@@ -78,10 +78,10 @@ int Scene::display() const {
         case UP: {
             if (currentSelection > 0) {
                 gotoxy(x - 2, y + currentSelection);
-                std::cout << "  " << choices.at(keys[currentSelection]).first;
+                std::cout << "  " << std::get<0>(choices.at(keys[currentSelection]));
                 --currentSelection;
                 gotoxy(x - 2, y + currentSelection);
-                std::cout << "> " << choices.at(keys[currentSelection]).first;
+                std::cout << "> " << std::get<0>(choices.at(keys[currentSelection]));
             }
             break;
         }
@@ -89,10 +89,10 @@ int Scene::display() const {
         case DOWN: {
             if (currentSelection < keys.size() - 1) {
                 gotoxy(x - 2, y + currentSelection);
-                std::cout << "  " << choices.at(keys[currentSelection]).first;
+                std::cout << "  " << std::get<0>(choices.at(keys[currentSelection]));
                 ++currentSelection;
                 gotoxy(x - 2, y + currentSelection);
-                std::cout << "> " << choices.at(keys[currentSelection]).first;
+                std::cout << "> " << std::get<0>(choices.at(keys[currentSelection]));
             }
             break;
         }
@@ -106,7 +106,7 @@ int Scene::display() const {
     }
 }
 
-std::map<char, std::pair<std::string, std::string>> Scene::getChoices() const {
+std::map<char, std::tuple<std::string, std::string, int, int, int, std::string>> Scene::getChoices() const {
     return choices;
 }
 
@@ -120,13 +120,13 @@ bool Scene::isValidChoice(char choice) const {
     return choices.find(choice) != choices.end();
 }
 
-void Game::applySceneEffects(const Scene& scene) {
-    player.health += scene.getHealthChange();
-    player.hunger += scene.getHungerChange();
-    player.money += scene.getMoneyChange();
+void Game::applySceneEffects(const Scene& scene, char choice) {
+    player.health += scene.getHealthChange(choice);
+    player.hunger += scene.getHungerChange(choice);
+    player.money += scene.getMoneyChange(choice);
 
-    if (!scene.getWeaponChange().empty()) {
-        player.weapon = scene.getWeaponChange();
+    if (!scene.getWeaponChange(choice).empty()) {
+        player.weapon = scene.getWeaponChange(choice);
     }
 
     if (player.health < 0) player.health = 0;
@@ -144,19 +144,7 @@ std::string Game::getNextSceneId(char choice, const std::string& currentSceneId)
     }
 
     const Scene& currentScene = scenes.at(currentSceneId);
-    std::vector<std::string> nextScenes;
-
-    for (const auto& ch : currentScene.getChoices()) {
-        if (ch.first != 'q') {
-            nextScenes.push_back(ch.second.second);
-        }
-    }
-
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> dis(0, nextScenes.size() - 1);
-
-    return nextScenes[dis(gen)];
+    return std::get<1>(currentScene.getChoices().at(choice));
 }
 
 void Game::start(const std::string& startSceneId) {
@@ -170,7 +158,7 @@ void Game::start(const std::string& startSceneId) {
         char choice = currentScene.display();
 
         // Scene의 효과를 적용
-        applySceneEffects(currentScene);
+        applySceneEffects(currentScene, choice);
 
         currentSceneId = getNextSceneId(choice, currentSceneId);
 
@@ -185,19 +173,19 @@ void runGame() {
     Game game;
 
     Scene scene1("나를 더 이상 쓸모없다고 판단해 폐기하려 한다.", {
-        {'1', {"도망간다", "2"}},
-        {'q', {"자결한다", "q"}}
-        }, -1, -1, 0, "");
+        {'1', {"도망간다", "2", -1, -1, 0, ""}},
+        {'q', {"자결한다", "q", 0, 0, 0, ""}}
+        });
 
     Scene scene2("거지를 만났다 그는 나를 잘 알고 있는듯 보인다", {
-        {'1', {"공격한다", "3"}},
-        {'2', {"이야기한다", "3"}},
-        {'3', {"돈을 준다", "3"}}
-        }, 0, 0, -1, "");
+        {'1', {"공격한다", "3", -2, 0, 0, ""}},
+        {'2', {"이야기한다", "3", 0, 0, 0, ""}},
+        {'3', {"돈을 준다", "3", 0, 0, -1, ""}}
+        });
 
     Scene scene3("예전에 함께 일했던 동료가 보인다", {
-        {'1', {"다가간다", "1"}},
-        {'2', {"무시한다", "1"}}
+        {'1', {"다가간다", "1", 1, 0, 1, "검"}},
+        {'2', {"무시한다", "1", 0, 0, 0, ""}}
         });
 
     game.addScene("1", scene1);
@@ -221,38 +209,32 @@ void drawHearts(int x, int y, int health) {
 }
 
 void drawHunger(int x, int y, int hunger) {
-    const std::string hungericon = "Ψ";
-    const std::string emptyhunger = " ";
+    const std::string hungerIcon = "Ψ";
+    const std::string emptyHunger = " ";
 
     gotoxy(x, y);
     for (int i = 0; i < hunger; ++i) {
-        std::cout << hungericon << " ";
+        std::cout << hungerIcon << " ";
     }
     for (int i = hunger; i < 3; ++i) {
-        std::cout << emptyhunger << " ";
+        std::cout << emptyHunger << " ";
     }
 }
 
 void drawMoney(int x, int y, int money) {
-    const std::string moneyicon = "$";
-    const std::string emptymoney = " ";
+    const std::string moneyIcon = "$";
+    const std::string emptyMoney = " ";
 
     gotoxy(x, y);
     for (int i = 0; i < money; ++i) {
-        std::cout << moneyicon << " ";
+        std::cout << moneyIcon << " ";
     }
     for (int i = money; i < 3; ++i) {
-        std::cout << emptymoney << " ";
+        std::cout << emptyMoney << " ";
     }
 }
 
 void drawWeapon(int x, int y, const std::string& weaponName) {
-    const std::string weaponIcon = "W";
-    const std::string emptyWeapon = " ";
-
     gotoxy(x, y);
-    std::cout << weaponName << ": ";
-    for (int i = 0; i < 3; ++i) {
-        std::cout << weaponIcon << " ";
-    }
+    std::cout << weaponName;
 }

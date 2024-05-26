@@ -29,6 +29,7 @@ int keyControl();
 void gotoxy(int x, int y);
 void titleDraw();
 void infoDraw();
+void EndingDraw();
 int menuDraw();
 void init(); // init 함수 선언 추가
 void drawMap();

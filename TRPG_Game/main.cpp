@@ -16,6 +16,7 @@ int main() {
             
         }
         else if (menuCode == 2) {
+            system("cls");
             return 0;
         }
         system("cls");
