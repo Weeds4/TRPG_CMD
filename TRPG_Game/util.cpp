@@ -34,6 +34,7 @@ void titleDraw() {
     std::cout << "\t\t" << "      ##        ##  ##      ##  ##        ##       ##        ##  ##   ##  ## \n";
     std::cout << "\t\t" << "      ##        #####       ######        ##       ##        ##  ##   ##### \n";
     std::cout << "\t\t" << "      ##        ##  ##     ##    ##      ####      ##         ####    ##  ## \n";
+    std::cout << "\t\t" << "      \n   \t\t\t\t     당신은 회사로부터 해고를 선고 받는다... \n \t\t\t\t     킬러였던 당신의 해고는 곧 죽음이였다 \n\t\t\t\t     당신은 죽음으로 부터 얼마나 도망 갈 수 있을것인가..\n";
 }
 
 void infoDraw() {
@@ -54,7 +55,7 @@ void infoDraw() {
 
 int menuDraw() {
     int x = 50;
-    int y = 12;
+    int y = 15;
     gotoxy(x - 2, y);
     std::cout << "> 게임시작   ";
     gotoxy(x, y + 1);
@@ -66,7 +67,7 @@ int menuDraw() {
         int n = keyControl();
         switch (n) {
         case UP: {
-            if (y > 12) {
+            if (y > 15) {
                 gotoxy(x - 2, y);
                 std::cout << " ";
                 gotoxy(x - 2, --y);
@@ -76,7 +77,7 @@ int menuDraw() {
         }
 
         case DOWN: {
-            if (y < 14) {
+            if (y < 17) {
                 gotoxy(x - 2, y);
                 std::cout << " ";
                 gotoxy(x - 2, ++y);
@@ -86,7 +87,7 @@ int menuDraw() {
         }
 
         case SUBMIT: {
-            return y - 12; // 선택한 메뉴의 인덱스를 반환합니다.
+            return y - 15; // 선택한 메뉴의 인덱스를 반환합니다.
         }
         default:
             break;
@@ -96,7 +97,7 @@ int menuDraw() {
 
 
 void EndingDraw() {
-
+    system("cls");
     std::cout << "\t\t" << "                                       ###     ##             \n";
     std::cout << "\t\t" << "                                        ##                    \n";
     std::cout << "\t\t" << "##  ##    ####    ##  ##                ##    ###      ####   \n";
@@ -104,7 +105,8 @@ void EndingDraw() {
     std::cout << "\t\t" << "##  ##   ##  ##   ##  ##            ##  ##     ##     ######  \n";
     std::cout << "\t\t" << " #####   ##  ##   ##  ##            ##  ##     ##     ##      \n";
     std::cout << "\t\t" << "   ##     ####    ######            ######   ####     ######  \n";
-    std::cout << "\t\t" << "##### \n";
+    std::cout << "\t\t" << "##### "<< std::endl;
+    exit(0);
 
 }
 

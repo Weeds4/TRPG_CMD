@@ -15,6 +15,12 @@ public:
 
     void displayStatus() const;
 
+    void setHealth(int newHealth) {
+        if (newHealth < 0) newHealth = 0;
+        if (newHealth > 3) newHealth = 3;
+        health = newHealth;
+    }
+
     int health;
     int hunger;
     int money;
@@ -25,8 +31,8 @@ class Scene {
 public:
     Scene() {}
 
-    Scene(const std::string& description, const std::map<char, std::tuple<std::string, std::string, int, int, int, std::string>>& choices)
-        : description(description), choices(choices) {}
+    Scene(const std::string& description, const std::map<char, std::tuple<std::string, std::string, int, int, int, std::string>>& choices, const std::string& transitionMessage)
+        : description(description), choices(choices), transitionMessage(transitionMessage) {}
 
     int display() const;
     std::map<char, std::tuple<std::string, std::string, int, int, int, std::string>> getChoices() const;
@@ -40,6 +46,7 @@ public:
 
 private:
     std::string description;
+    std::string transitionMessage; // 다음 씬으로 넘어갈 때 출력할 메시지
     std::map<char, std::tuple<std::string, std::string, int, int, int, std::string>> choices;
 };
 
@@ -51,7 +58,11 @@ public:
     void start(const std::string& startSceneId);
     std::string getNextSceneId(char choice, const std::string& currentSceneId) const;
 
+
 private:
+
+    bool gameOver;
+
     void applySceneEffects(const Scene& scene, char choice);
 
     std::map<std::string, Scene> scenes;

@@ -132,6 +132,10 @@ void Game::applySceneEffects(const Scene& scene, char choice) {
     if (player.health < 0) player.health = 0;
     if (player.hunger < 0) player.hunger = 0;
     if (player.money < 0) player.money = 0;
+
+    if (player.health <= 0) {
+        gameOver = true;
+    }
 }
 
 void Game::addScene(const std::string& sceneId, const Scene& scene) {
@@ -151,6 +155,11 @@ void Game::start(const std::string& startSceneId) {
     std::string currentSceneId = startSceneId;
 
     while (true) {
+        if (gameOver) {
+            EndingDraw();
+            break;
+        }
+
         system("cls");
 
         const Scene& currentScene = scenes.at(currentSceneId);
@@ -160,37 +169,72 @@ void Game::start(const std::string& startSceneId) {
         // Scene의 효과를 적용
         applySceneEffects(currentScene, choice);
 
-        currentSceneId = getNextSceneId(choice, currentSceneId);
-
-        if (currentSceneId == "q") {
+        if (gameOver) {
+            EndingDraw();
             break;
         }
+
+        int x = 43;
+        int y = 13;
+        {
+            system("cls");
+            // 다음 씬으로 넘어갈 때 출력할 메시지를 출력합니다.
+            setColor(white, white);
+            for (int i = x - 12; i <= x + 45; ++i) {
+                gotoxy(i, y - 13);
+                std::cout << " ";
+                gotoxy(i, y + 6);
+                std::cout << " ";
+            }
+            for (int j = y - 13; j <= y + 6; ++j) {
+                gotoxy(x - 12, j);
+                std::cout << " ";
+                gotoxy(x + 45, j);
+                std::cout << " ";
+            }
+
+            gotoxy(x+1, y -4);  // 선택된 선택지를 표시할 위치
+            setColor(white, black);
+            std::cout << "뭔가 이상한 기운이 느껴진다...";
+        }
+        Sleep(2000);  // 2초 대기
+
+        currentSceneId = getNextSceneId(choice, currentSceneId);
     }
 }
+
 
 void runGame() {
     system("cls");
     Game game;
 
-    Scene scene1("나를 더 이상 쓸모없다고 판단해 폐기하려 한다.", {
-        {'1', {"도망간다", "2", -1, -1, 0, ""}},
-        {'q', {"자결한다", "q", 0, 0, 0, ""}}
-        });
+    Scene scene1(" 저 멀리 사람들이 많이 보인다 ", {
+        {'1', {"다가간다", "2", 0, 0, 0, "맨손"}},
+        {'q', {"지나친다", "q", 0, 0, 0, "맨손"}}
+        },"뭔가 이상한 기운이 느껴진다...");
 
     Scene scene2("거지를 만났다 그는 나를 잘 알고 있는듯 보인다", {
         {'1', {"공격한다", "3", -2, 0, 0, ""}},
         {'2', {"이야기한다", "3", 0, 0, 0, ""}},
         {'3', {"돈을 준다", "3", 0, 0, -1, ""}}
-        });
+        },"뭔가 이상한 기운이 느껴진다...");
 
     Scene scene3("예전에 함께 일했던 동료가 보인다", {
-        {'1', {"다가간다", "1", 1, 0, 1, "검"}},
+        {'1', {"다가간다", "4", 1, 0, 1, "검"}},
         {'2', {"무시한다", "1", 0, 0, 0, ""}}
-        });
+        },"뭔가 이상한 기운이 느껴진다...");
+    
+    Scene scene4("도망간다", {
+        {'1', {"다가간다", "1", 1, 0, 1, ""}},
+        {'2', {"무시한다", "1", 0, 0, 0, ""}}
+        },"뭔가 이상한 기운이 느껴진다...");
 
     game.addScene("1", scene1);
     game.addScene("2", scene2);
     game.addScene("3", scene3);
+    game.addScene("4", scene4);
+
+
 
     game.start("1");
 }
