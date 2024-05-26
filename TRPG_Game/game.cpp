@@ -13,10 +13,10 @@ void Player::displayStatus() const {
     {
         // Draw white border
         setColor(white, white);
-        for (int i = x - 7; i <= x + 52; ++i) {
-            gotoxy(i, y + 2);
+        for (int i = x - 9; i <= x + 47; ++i) {
+            gotoxy(i, y + 1);
             std::cout << "1";
-            gotoxy(i, y + 2);
+            gotoxy(i, y + 1);
             std::cout << "1";
         }
     }
@@ -24,11 +24,10 @@ void Player::displayStatus() const {
     // Set text color back to default (e.g., white text on black background)
     setColor(white, black);
 
-    //gotoxy(x-5, y);
-    drawHearts(x - 5, y, 3);
-    drawhunger(x + 5, y, 3);
-    drawmoney(x + 15, y, 3);
-    drawWeapon(x + 25, y, 3, "없음");
+    drawHearts(x - 5, y, health);
+    drawHunger(x + 5, y, hunger);
+    drawMoney(x + 15, y, money);
+    drawWeapon(x + 25, y, weapon);
 }
 
 int Scene::display() const {
@@ -38,16 +37,16 @@ int Scene::display() const {
     {
         // Draw white border
         setColor(white, white);
-        for (int i = x - 9; i <= x + 49; ++i) {
+        for (int i = x - 12; i <= x + 45; ++i) {
             gotoxy(i, y - 13);
             std::cout << "1";
-            gotoxy(i, y + choices.size() + 4); // 테두리 아래쪽 경계를 2만큼 더 아래로 이동
+            gotoxy(i, y + 6);
             std::cout << "1";
         }
-        for (int j = y - 13; j <= y + choices.size() + 4; ++j) { // 테두리 아래쪽 경계를 2만큼 더 아래로 이동
-            gotoxy(x - 10, j);
+        for (int j = y - 13; j <= y + 6; ++j) {
+            gotoxy(x - 12, j);
             std::cout << "1";
-            gotoxy(x + 50, j);
+            gotoxy(x + 45, j);
             std::cout << "1";
         }
     }
@@ -55,7 +54,7 @@ int Scene::display() const {
     // Set text color back to default (e.g., white text on black background)
     setColor(white, black);
 
-    gotoxy(x - 2, y - 8);
+    gotoxy(x - 6, y - 8);
     std::cout << description;
 
     int index = 0;
@@ -71,7 +70,6 @@ int Scene::display() const {
         keys.push_back(choice.first);
         ++index;
     }
-
 
     int currentSelection = 0;
     while (true) {
@@ -122,20 +120,34 @@ bool Scene::isValidChoice(char choice) const {
     return choices.find(choice) != choices.end();
 }
 
+void Game::applySceneEffects(const Scene& scene) {
+    player.health += scene.getHealthChange();
+    player.hunger += scene.getHungerChange();
+    player.money += scene.getMoneyChange();
+
+    if (!scene.getWeaponChange().empty()) {
+        player.weapon = scene.getWeaponChange();
+    }
+
+    if (player.health < 0) player.health = 0;
+    if (player.hunger < 0) player.hunger = 0;
+    if (player.money < 0) player.money = 0;
+}
+
 void Game::addScene(const std::string& sceneId, const Scene& scene) {
     scenes[sceneId] = scene;
 }
 
 std::string Game::getNextSceneId(char choice, const std::string& currentSceneId) const {
     if (choice == 'q') {
-        return "q";  // '자결하기' 선택 시 바로 종료
+        return "q";
     }
 
     const Scene& currentScene = scenes.at(currentSceneId);
     std::vector<std::string> nextScenes;
 
     for (const auto& ch : currentScene.getChoices()) {
-        if (ch.first != 'q') {  // 'q'를 제외한 선택지만 추가
+        if (ch.first != 'q') {
             nextScenes.push_back(ch.second.second);
         }
     }
@@ -154,8 +166,11 @@ void Game::start(const std::string& startSceneId) {
         system("cls");
 
         const Scene& currentScene = scenes.at(currentSceneId);
-        player.displayStatus();  // 현재 플레이어 상태를 출력
+        player.displayStatus();
         char choice = currentScene.display();
+
+        // Scene의 효과를 적용
+        applySceneEffects(currentScene);
 
         currentSceneId = getNextSceneId(choice, currentSceneId);
 
@@ -172,18 +187,17 @@ void runGame() {
     Scene scene1("나를 더 이상 쓸모없다고 판단해 폐기하려 한다.", {
         {'1', {"도망간다", "2"}},
         {'q', {"자결한다", "q"}}
-        });
+        }, -1, -1, 0, "");
 
     Scene scene2("거지를 만났다 그는 나를 잘 알고 있는듯 보인다", {
         {'1', {"공격한다", "3"}},
         {'2', {"이야기한다", "3"}},
         {'3', {"돈을 준다", "3"}}
-        });
+        }, 0, 0, -1, "");
 
     Scene scene3("예전에 함께 일했던 동료가 보인다", {
         {'1', {"다가간다", "1"}},
-        {'2', {"먼저 공격한다", "1"}},
-        {'3', {"도망친다", "1"}}
+        {'2', {"무시한다", "1"}}
         });
 
     game.addScene("1", scene1);
@@ -206,7 +220,7 @@ void drawHearts(int x, int y, int health) {
     }
 }
 
-void drawhunger(int x, int y, int hunger) {
+void drawHunger(int x, int y, int hunger) {
     const std::string hungericon = "Ψ";
     const std::string emptyhunger = " ";
 
@@ -219,7 +233,7 @@ void drawhunger(int x, int y, int hunger) {
     }
 }
 
-void drawmoney(int x, int y, int money) {
+void drawMoney(int x, int y, int money) {
     const std::string moneyicon = "$";
     const std::string emptymoney = " ";
 
@@ -232,17 +246,13 @@ void drawmoney(int x, int y, int money) {
     }
 }
 
-void drawWeapon(int x, int y, int weapon, const std::string& weaponName) {
+void drawWeapon(int x, int y, const std::string& weaponName) {
     const std::string weaponIcon = "W";
     const std::string emptyWeapon = " ";
 
     gotoxy(x, y);
     std::cout << weaponName << ": ";
-    for (int i = 0; i < weapon; ++i) {
+    for (int i = 0; i < 3; ++i) {
         std::cout << weaponIcon << " ";
     }
-    for (int i = weapon; i < 3; ++i) {
-        std::cout << emptyWeapon << " ";
-    }
 }
-
