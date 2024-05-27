@@ -98,18 +98,13 @@ int Scene::display() const {
         }
 
         case SUBMIT: {
-            char choice = keys[currentSelection];
-            if (isValidChoice(choice)) {
-                return choice;
-            }
-            break;
+            return keys[currentSelection];
         }
         default:
             break;
         }
     }
 }
- 
 
 std::map<char, std::tuple<std::string, std::string, int, int, int, std::string>> Scene::getChoices() const {
     return choices;
@@ -176,10 +171,6 @@ void Game::start(const std::string& startSceneId) {
 
         if (gameOver) {
             EndingDraw();
-            Sleep(3000);
-            system("cls");
-            titleDraw();
-            menuDraw();
             break;
         }
 
@@ -209,9 +200,6 @@ void Game::start(const std::string& startSceneId) {
         Sleep(2000);  // 2초 대기
 
         currentSceneId = getNextSceneId(choice, currentSceneId);
-        if (currentSceneId == "q") {
-            break;
-        }
     }
 }
 
@@ -220,9 +208,9 @@ void runGame() {
     system("cls");
     Game game;
 
-    Scene scene1(" 저 멀리 킬러들이 많이 보인다 ", {
-        {'1', {"다가간다", "2", -3, 0, 0, "맨손"}},
-        {'q', {"지나친다", "2", 0, 0, 0, "맨손"}}
+    Scene scene1(" 저 멀리 사람들이 많이 보인다 ", {
+        {'1', {"다가간다", "2", 0, 0, 0, "맨손"}},
+        {'q', {"지나친다", "q", 0, 0, 0, "맨손"}}
         },"뭔가 이상한 기운이 느껴진다...");
 
     Scene scene2("거지를 만났다 그는 나를 잘 알고 있는듯 보인다", {
@@ -234,7 +222,7 @@ void runGame() {
     Scene scene3("예전에 함께 일했던 동료가 보인다", {
         {'1', {"다가간다", "4", 1, 0, 1, "검"}},
         {'2', {"무시한다", "1", 0, 0, 0, ""}}
-        }, "뭔가 이상한 기운이 느껴진다...");
+        },"뭔가 이상한 기운이 느껴진다...");
     
     Scene scene4("도망간다", {
         {'1', {"다가간다", "1", 1, 0, 1, ""}},
@@ -249,8 +237,6 @@ void runGame() {
 
 
     game.start("1");
-
-   
 }
 
 void drawHearts(int x, int y, int health) {
