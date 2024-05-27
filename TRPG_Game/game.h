@@ -29,7 +29,6 @@ public:
 
 class Scene {
 public:
-
     Scene() {}
 
     Scene(const std::string& description, const std::map<char, std::tuple<std::string, std::string, int, int, int, std::string>>& choices, const std::string& transitionMessage)
@@ -44,7 +43,6 @@ public:
     int getHungerChange(char choice) const { return std::get<3>(choices.at(choice)); }
     int getMoneyChange(char choice) const { return std::get<4>(choices.at(choice)); }
     std::string getWeaponChange(char choice) const { return std::get<5>(choices.at(choice)); }
-    std::string getTransitionMessage() const { return transitionMessage; }
 
 private:
     std::string description;
