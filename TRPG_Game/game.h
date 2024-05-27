@@ -31,8 +31,9 @@ class Scene {
 public:
     Scene() {}
 
-    Scene(const std::string& description, const std::map<char, std::tuple<std::string, std::string, int, int, int, std::string>>& choices, const std::string& transitionMessage)
-        : description(description), choices(choices), transitionMessage(transitionMessage) {}
+    Scene(const std::string& description, const std::map<char, std::tuple<std::string, std::string, int, int, int, std::string>>& choices, const std::string& transitionMessage, const std::map<char, std::string>& effectMessages)
+        : description(description), choices(choices), transitionMessage(transitionMessage), effectMessages(effectMessages) {}
+
 
     int display() const;
     std::map<char, std::tuple<std::string, std::string, int, int, int, std::string>> getChoices() const;
@@ -43,12 +44,23 @@ public:
     int getHungerChange(char choice) const { return std::get<3>(choices.at(choice)); }
     int getMoneyChange(char choice) const { return std::get<4>(choices.at(choice)); }
     std::string getWeaponChange(char choice) const { return std::get<5>(choices.at(choice)); }
+    std::string getTransitionMessage() const { return transitionMessage; }
+    std::string getEffectMessage(char choice) const {
+        if (effectMessages.find(choice) != effectMessages.end()) {
+            return effectMessages.at(choice);
+        }
+        else {
+            return "";
+        }
+    }
 
 private:
     std::string description;
-    std::string transitionMessage; // 다음 씬으로 넘어갈 때 출력할 메시지
+    std::string transitionMessage;
     std::map<char, std::tuple<std::string, std::string, int, int, int, std::string>> choices;
+    std::map<char, std::string> effectMessages;
 };
+
 
 class Game {
 public:
