@@ -15,23 +15,23 @@ public:
 
     void displayStatus() const;
 
-    void setHealth(int newHealth) {
-        if (newHealth < 0) newHealth = 0;
-        if (newHealth > maxHealth) newHealth = maxHealth;
-        health = newHealth;
-    }
+    //void setHealth(int newHealth) {
+    //    if (newHealth < 0) newHealth = 0;
+    //    if (newHealth > maxHealth) newHealth = maxHealth;
+    //    health = newHealth;
+    //}
 
-    void setHunger(int newHunger) {
-        if (newHunger < 0) newHunger = 0;
-        if (newHunger > maxHunger) newHunger = maxHunger;
-        hunger = newHunger;
-    }
+    //void setHunger(int newHunger) {
+    //    if (newHunger < 0) newHunger = 0;
+    //    if (newHunger > maxHunger) newHunger = maxHunger;
+    //    hunger = newHunger;
+    //}
 
-    void setMoney(int newMoney) {
-        if (newMoney < 0) newMoney = 0;
-        if (newMoney > maxMoney) newMoney = maxMoney;
-        money = newMoney;
-    }
+    //void setMoney(int newMoney) {
+    //    if (newMoney < 0) newMoney = 0;
+    //    if (newMoney > maxMoney) newMoney = maxMoney;
+    //    money = newMoney;
+    //}
 
     int health;
     int maxHealth;

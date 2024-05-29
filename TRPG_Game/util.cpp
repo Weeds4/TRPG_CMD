@@ -40,11 +40,11 @@ void titleDraw() {
 void infoDraw() {
     system("cls"); // 화면 모두 지우기
     std::cout << "\n\n\n";
-    std::cout << "                 \t [ 조작법 ]\n\n";
-    std::cout << "             \t 이동: W, A, S, D\n";
-    std::cout << "             \t 선택: 스페이스바\n\n\n\n";
-    std::cout << "    \t  개발자: codevkr.tistory.com\n\n\n";
-    std::cout << "\t스페이스바를 누르면 메인화면으로 이동합니다.\n";
+    std::cout << "                 \t\t\t\t\t [ 조작법 ]\n\n";
+    std::cout << "             \t\t\t\t\t      이동: W, A, S, D\n";
+    std::cout << "             \t\t\t\t\t      선택: 스페이스바\n\n\n\n";
+    std::cout << "    \t\t\t\t\t\t  개발자: codevkr.tistory.com\n\n\n";
+    std::cout << "\t\t\t\t\t스페이스바를 누르면 메인화면으로 이동합니다.\n";
 
     while (1) {
         if (keyControl() == SUBMIT) {
@@ -106,7 +106,7 @@ void EndingDraw() {
     std::cout << "\t\t" << " #####   ##  ##   ##  ##            ##  ##     ##     ##      \n";
     std::cout << "\t\t" << "   ##     ####    ######            ######   ####     ######  \n";
     std::cout << "\t\t" << "##### "<< std::endl;
-    exit(0);
+    
 
 }
 

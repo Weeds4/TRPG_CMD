@@ -133,10 +133,10 @@ bool Scene::isValidChoice(char choice, const Player& player) const {
 
 void Game::applySceneEffects(const Scene& scene, char choice) {
 
-    player.maxHealth = 3;
-    player.maxHunger = 3;
-    player.maxMoney = 3;
-   
+    if (player.health == 0) player.maxHealth = 3;
+    if (player.hunger == 0) player.maxHunger = 3;
+    if (player.money == 0) player.maxMoney = 3;
+
     player.health += scene.getHealthChange(choice);
     player.hunger += scene.getHungerChange(choice);
     player.money += scene.getMoneyChange(choice);
@@ -185,13 +185,13 @@ void Game::applySceneEffects(const Scene& scene, char choice) {
         
     }
 
-    if (player.health < 0) player.health = 0;
-    if (player.hunger < 0) player.hunger = 0;
-    if (player.money < 0) player.money = 0;  
+    if (player.health <= 0) player.health = 0;
+    if (player.hunger <= 0) player.hunger = 0;
+    if (player.money <= 0) player.money = 0;  
     
-    if (player.health > player.maxHealth) player.health = player.maxHealth;
-    if (player.hunger > player.maxHunger) player.hunger = player.maxHunger;
-    if (player.money > player.maxMoney) player.money = player.maxMoney;
+    if (player.health >= player.maxHealth) player.health = player.maxHealth;
+    if (player.hunger >= player.maxHunger) player.hunger = player.maxHunger;
+    if (player.money >= player.maxMoney) player.money = player.maxMoney;
 
 
     if (player.hunger < 0) {
@@ -284,7 +284,6 @@ void Game::start(const std::string& startSceneId) {
             system("cls");
             titleDraw();
             menuDraw();
-            break;
         }
     }
 }
@@ -820,7 +819,7 @@ void runGame() {
 
 
 
-    game.start("1");
+    game.start("40");
 }
 
 void drawHearts(int x, int y, int health, int maxHealth) {
