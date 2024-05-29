@@ -35,4 +35,5 @@ void init(); // init 함수 선언 추가
 void drawMap();
 void setColor(int, int);
 void gLoop(int);
+void Xending();
 #endif

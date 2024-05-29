@@ -34,7 +34,7 @@ void titleDraw() {
     std::cout << "\t\t" << "      ##        ##  ##      ##  ##        ##       ##        ##  ##   ##  ## \n";
     std::cout << "\t\t" << "      ##        #####       ######        ##       ##        ##  ##   ##### \n";
     std::cout << "\t\t" << "      ##        ##  ##     ##    ##      ####      ##         ####    ##  ## \n";
-    std::cout << "\t\t" << "      \n   \t\t\t\t     당신은 회사로부터 해고를 선고 받는다... \n \t\t\t\t     킬러였던 당신의 해고는 곧 죽음이였다 \n\t\t\t\t     일주일간 살아남아라.. 그럼 살아나갈 수 있을것이다\n";
+    std::cout << "\t\t" << "      \n   \t\t\t\t     당신은 회사로부터 해고를 선고 받는다... \n \t\t\t\t     킬러였던 당신의 해고는 곧 죽음이였다 \n\t\t\t\t     당신에게 주어진 시간은 120시간이다\n";
 }
 
 void infoDraw() {
@@ -110,7 +110,36 @@ void EndingDraw() {
 
 }
 
+void Xending(){
+        int x = 43;
+        int y = 13;
+        {
+            system("cls");
+            // 효과 메시지 출력
+            setColor(white, white);
+            for (int i = x - 12; i <= x + 45; ++i) {
+                gotoxy(i, y - 13);
+                std::cout << " ";
+                gotoxy(i, y + 6);
+                std::cout << " ";
+            }
+            for (int j = y - 13; j <= y + 6; ++j) {
+                gotoxy(x - 12, j);
+                std::cout << " ";
+                gotoxy(x + 45, j);
+                std::cout << " ";
+            }
+            gotoxy(x - 4, y - 7);  // 선택된 선택지를 표시할 위치
+            setColor(white, black);
+            std::cout << "당신은, 위대한 킬러였습니다.. \n \t\t\t\t       하지만 그렇기에 당신은 너무나 적이 많았습니다.. \n \t\t\t\t       당신은 끝끝내 도주를 실패하고 살해당했습니다..";
+        }
+        Sleep(1000);  // 2초 대기
+        system("cls");
 
+        titleDraw();
+        menuDraw();
+
+    }
 
 
 char tempMap[20][100];
