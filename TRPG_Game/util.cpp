@@ -34,7 +34,7 @@ void titleDraw() {
     std::cout << "\t\t" << "      ##        ##  ##      ##  ##        ##       ##        ##  ##   ##  ## \n";
     std::cout << "\t\t" << "      ##        #####       ######        ##       ##        ##  ##   ##### \n";
     std::cout << "\t\t" << "      ##        ##  ##     ##    ##      ####      ##         ####    ##  ## \n";
-    std::cout << "\t\t" << "      \n   \t\t\t\t     당신은 회사로부터 해고를 선고 받는다... \n \t\t\t\t     킬러였던 당신의 해고는 곧 죽음이였다 \n\t\t\t\t     당신에게 주어진 시간은 120시간이다\n";
+    std::cout << "\t\t" << "      \n   \t\t\t\t     당신은 은퇴를 하게 된다.. \n \t\t\t\t     킬러였던 당신의 은퇴식은 곧 죽음이였다 \n\t\t\t\t     당신에게 주어진 시간은 120시간.. 살아 남아라\n";
 }
 
 void infoDraw() {
@@ -44,7 +44,8 @@ void infoDraw() {
     std::cout << "             \t\t\t\t\t      이동: W, A, S, D\n";
     std::cout << "             \t\t\t\t\t      선택: 스페이스바\n\n\n\n";
     std::cout << "    \t\t\t\t\t\t  개발자: codevkr.tistory.com\n\n\n";
-    std::cout << "\t\t\t\t\t스페이스바를 누르면 메인화면으로 이동합니다.\n";
+    std::cout << "\t\t\t\t\t스페이스바를 누르면 메인화면으로 이동합니다.\n\n";
+    std::cout << "\t\t\t\t\t 아이템 획득시 추가 체력, 배고픔, 골드.. 등등\n";
 
     while (1) {
         if (keyControl() == SUBMIT) {
@@ -105,7 +106,10 @@ void EndingDraw() {
     std::cout << "\t\t" << "##  ##   ##  ##   ##  ##            ##  ##     ##     ######  \n";
     std::cout << "\t\t" << " #####   ##  ##   ##  ##            ##  ##     ##     ##      \n";
     std::cout << "\t\t" << "   ##     ####    ######            ######   ####     ######  \n";
-    std::cout << "\t\t" << "##### "<< std::endl;
+    std::cout << "\t\t" << "##### \n";
+    std::cout << "\t\t" << "당신은 결국.. 살아남지 못했습니다.." << std::endl;
+
+    Sleep(1000);
     
 
 }
