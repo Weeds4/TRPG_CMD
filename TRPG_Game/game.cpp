@@ -328,7 +328,7 @@ void runGame() {
         }, "뭔가 이상한 기운이 느껴진다...", {
             {'1', "근처에 있는 건물로 들어갔습니다."},
             {'2', "총탄이 당신의 팔을 스쳤습니다.."},
-            {'3', "총에 어깨 부상을 당했습니다."}
+            {'3', "붕대와 현금다발을 훔쳤습니다."}
         });
 
     Scene scene5("마트에 들어왔습니다,다양한 물건이 있습니다.", {
@@ -819,7 +819,7 @@ void runGame() {
 
 
 
-    game.start("1");
+    game.start("40");
 }
 
 void drawHearts(int x, int y, int health, int maxHealth) {
