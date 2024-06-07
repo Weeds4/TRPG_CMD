@@ -109,9 +109,6 @@ void EndingDraw() {
     std::cout << "\t\t" << "##### \n";
     std::cout << "\t\t" << "당신은 결국.. 살아남지 못했습니다.." << std::endl;
 
-    Sleep(1000);
-    
-
 }
 
 void Xending(){
